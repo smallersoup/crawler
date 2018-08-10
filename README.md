@@ -2,6 +2,7 @@
 IDEA go插件下载地址
 https://plugins.jetbrains.com/plugin/9568-go
 
+```go
 err := zipFile(config.LogFile, backfile)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("zip file %s to %s error : %v", config.LogFile, backfile, err))
@@ -63,12 +64,12 @@ err := zipFile(config.LogFile, backfile)
 		return err
 	})
 }
-
+```
 
 
 
 java:
-
+```java
  /**
      * 日志压缩
      * @param waitZipFile 要压缩文件名
@@ -209,3 +210,4 @@ java:
         }
 
     }
+  ```
