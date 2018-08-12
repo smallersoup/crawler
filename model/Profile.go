@@ -16,7 +16,7 @@ type Profile struct {
 	//婚姻状况
 	Marriage string
 	//学历
-	Education string
+	Education    string
 	WorkLocation string
 	//职业
 	Occupation string

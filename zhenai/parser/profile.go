@@ -47,23 +47,21 @@ func ParseProfile(contents []byte, name string) engine.ParserResult {
 
 	if err != nil {
 		profile.Age = 0
-	}else {
+	} else {
 		profile.Age = age
 	}
-
-
 
 	height, err := strconv.Atoi(extractString(contents, heightReg))
 	if err != nil {
 		profile.Height = 0
-	}else {
+	} else {
 		profile.Height = height
 	}
 
 	weight, err := strconv.Atoi(extractString(contents, weightReg))
 	if err != nil {
 		profile.Weight = 0
-	}else {
+	} else {
 		profile.Weight = weight
 	}
 

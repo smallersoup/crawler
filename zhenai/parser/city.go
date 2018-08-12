@@ -2,8 +2,8 @@ package parser
 
 import (
 	"crawler/engine"
-	"regexp"
 	"log"
+	"regexp"
 )
 
 const (
@@ -30,9 +30,9 @@ func ParseCity(contents []byte) engine.ParserResult {
 		result.Requests = append(result.Requests,
 			engine.Request{
 				//用户信息对应的URL,用于之后的用户信息爬取
-				Url : string(m[1]),
+				Url: string(m[1]),
 				//这个parser是对城市下面的用户的parse
-				ParserFunc : func(bytes []byte) engine.ParserResult {
+				ParserFunc: func(bytes []byte) engine.ParserResult {
 					//这里使用闭包的方式;这里不能用m[2],否则所有for循环里的用户都会共用一个名字
 					//需要拷贝m[2] ---- name := string(m[2])
 					return ParseProfile(bytes, name)

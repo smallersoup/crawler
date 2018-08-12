@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"testing"
 	"io/ioutil"
+	"testing"
 )
 
 func TestParseCityList(t *testing.T) {
@@ -29,25 +29,25 @@ func TestParseCityList(t *testing.T) {
 	}
 
 	if len(result.Requests) != resultSize {
-		t.Errorf("result should have %d " +
+		t.Errorf("result should have %d "+
 			"requests;but had %d", resultSize, len(result.Requests))
 	}
 
-	for i, url := range  expectedUrls {
+	for i, url := range expectedUrls {
 		if url != result.Requests[i].Url {
-			t.Errorf("expectedUrl is %s " +
+			t.Errorf("expectedUrl is %s "+
 				"but is %s", url, result.Requests[i].Url)
 		}
 	}
 
 	if len(result.Items) != resultSize {
-		t.Errorf("result should have %d " +
+		t.Errorf("result should have %d "+
 			"items;but had %d", resultSize, len(result.Items))
 	}
 
-	for i, city := range  expectedCitys {
+	for i, city := range expectedCitys {
 		if city != result.Items[i].(string) {
-			t.Errorf("expectedCity is %s " +
+			t.Errorf("expectedCity is %s "+
 				"but is %s", city, result.Items[i].(string))
 		}
 	}

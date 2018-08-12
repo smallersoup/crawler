@@ -5,9 +5,9 @@ import (
 	"log"
 )
 
-type SimpleEngine struct {}
+type SimpleEngine struct{}
 
-func (simpleEngine *SimpleEngine) Run(seeds ...Request){
+func (simpleEngine *SimpleEngine) Run(seeds ...Request) {
 
 	//这里维持一个队列
 	var requestsQueue []Request

@@ -25,9 +25,9 @@ func ParseCityList(contents []byte) engine.ParserResult {
 
 		result.Requests = append(result.Requests,
 			engine.Request{
-				Url : string(m[1]),
+				Url: string(m[1]),
 				//这个parser是对城市下面的用户的parse
-				ParserFunc : ParseCity,
+				ParserFunc: ParseCity,
 			})
 		//limit--
 		//if limit == 0 {
