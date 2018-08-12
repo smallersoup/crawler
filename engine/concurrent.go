@@ -10,10 +10,14 @@ type ConcurrentEngine struct {
 }
 
 type Scheduler interface {
+	ReadyNotifier
 	Submit(Request)
-	ConfigureMasterWorkerChan(chan Request)
-	WorkReady(chan Request)
+	WorkerChan() chan Request
 	Run()
+}
+
+type ReadyNotifier interface {
+	WorkReady(chan Request)
 }
 
 func (e *ConcurrentEngine) Run(seeds ...Request) {
@@ -29,7 +33,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	//创建Worker
 	for i := 0; i < e.WokerCount; i++ {
 		//createWorker(in, out)
-		createWorkerByQueuedScheduler(out, e.Scheduler)
+		createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
 	}
 
 	//任务分发给Worker
@@ -39,7 +43,6 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 
 	count := 0
 	for {
-
 		//打印out的items
 		result := <-out
 		for _, item := range result.Items {
@@ -56,7 +59,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 }
 
 //workerConut goroutine to exec worker for Loop
-func createWorker(in chan Request, out chan ParserResult) {
+/*func createWorker(in chan Request, out chan ParserResult) {
 	go func() {
 		for {
 			request := <-in
@@ -72,15 +75,13 @@ func createWorker(in chan Request, out chan ParserResult) {
 			out <- parserResult
 		}
 	}()
-}
+}*/
 
 //workerConut goroutine to exec worker for Loop
-func createWorkerByQueuedScheduler(out chan ParserResult, q Scheduler) {
+func createWorker(in chan Request, out chan ParserResult, ready ReadyNotifier) {
 	go func() {
-		in := make(chan Request)
 		for {
-
-			q.WorkReady(in)
+			ready.WorkReady(in)
 			// 这里会卡住,直到QueuedScheduler.Run()里第三个case被执行,即把requestQ[0]放进workerQ[0]
 			// 后每个这里定义的in(chan of Request)就有值不阻塞了
 			request := <-in

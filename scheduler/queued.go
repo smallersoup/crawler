@@ -4,9 +4,15 @@ import (
 	"crawler/engine"
 )
 
+//每个worker有自己的chan,即chan engine.Request
 type QueuedScheduler struct {
 	requestChan chan engine.Request
 	workerChan  chan chan engine.Request
+}
+
+func (q *QueuedScheduler) WorkerChan() chan engine.Request {
+	//QueuedScheduler自己知道要多少个workerChan
+	return make(chan engine.Request)
 }
 
 func (q *QueuedScheduler) Submit(r engine.Request) {
