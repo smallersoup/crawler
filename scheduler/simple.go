@@ -18,7 +18,7 @@ func (s *SimpleScheduler) WorkReady(chan engine.Request) {
 }
 
 func (s *SimpleScheduler) Run() {
-	s.workChan = make(chan engine.Request)
+	s.workChan = make(chan engine.Request, 1024)
 }
 
 func (s *SimpleScheduler) Submit(r engine.Request) {

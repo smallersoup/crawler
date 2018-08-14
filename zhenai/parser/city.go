@@ -6,15 +6,13 @@ import (
 	"regexp"
 )
 
-const (
+var proFileReg = regexp.MustCompile(`<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`)
+var cityNextPageReg = regexp.MustCompile(`(http://www.zhenai.com/zhenghun/[^"]+)`)
 	//<a href="http://album.zhenai.com/u/1361133512" target="_blank">怎么会迷上你</a>
-	cityReg = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a>`
-)
 
 func ParseCity(contents []byte) engine.ParserResult {
-	compile := regexp.MustCompile(cityReg)
 
-	submatch := compile.FindAllSubmatch(contents, -1)
+	submatch := proFileReg.FindAllSubmatch(contents, -1)
 
 	//这里要把解析到的每个URL都生成一个新的request
 
@@ -38,6 +36,16 @@ func ParseCity(contents []byte) engine.ParserResult {
 					return ParseProfile(bytes, name)
 				},
 			})
+	}
+
+	matches := cityNextPageReg.FindAllSubmatch(contents, -1)
+
+
+	for _, m := range matches {
+		result.Requests = append(result.Requests, engine.Request{
+			Url: string(m[1]),
+			ParserFunc: ParseCity,
+		})
 	}
 
 	return result

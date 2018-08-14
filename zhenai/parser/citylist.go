@@ -5,14 +5,11 @@ import (
 	"regexp"
 )
 
-const (
-	cityListReg = `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`
-)
+var	cityListReg = regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`)
 
 func ParseCityList(contents []byte) engine.ParserResult {
-	compile := regexp.MustCompile(cityListReg)
 
-	submatch := compile.FindAllSubmatch(contents, -1)
+	submatch := cityListReg.FindAllSubmatch(contents, -1)
 
 	//这里要把解析到的每个URL都生成一个新的request
 
