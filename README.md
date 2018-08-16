@@ -3,6 +3,44 @@ IDEA go插件下载地址
 https://plugins.jetbrains.com/plugin/9568-go
 
 ```go
+
+func startCheckDeleteLogTimer(file string) {
+
+	//get now time
+	now := time.Now()
+
+	//get duration of now and 00:00:00 as Timer duration
+	du := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, time.Local).Sub(now)
+
+	//count down timer
+	t := time.NewTimer(du)
+
+	isFirst := make(chan bool, 1)
+	select {
+	case isFirstTime := <-t.C:
+		fmt.Println("first time for exec delete auditlog check.. FirstTime: ", isFirstTime)
+		t.Stop()
+		checkDeleteAuditLog(file)
+		isFirst <- false
+
+	}
+
+	//this goroutine block until count down timer stop
+	<-isFirst
+
+	//ticker for exec delete auditlog check every 24 hours
+	checkDelTicker := time.Tick(24 * time.Hour)
+
+	for {
+		select {
+		case <- checkDelTicker:
+			fmt.Println("will exec delete auditlog check.. CurrentTime: ", time.Now())
+			checkDeleteAuditLog(file)
+		}
+	}
+}
+
+
 err := zipFile(config.LogFile, backfile)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("zip file %s to %s error : %v", config.LogFile, backfile, err))
