@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #customers table {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        #customers table td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers table tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .container {
+            padding-top: 30px;
+        }
+
+    </style>
+
+    <title>Love Search</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div id="demo">
+
+    <div class="container">
+        <div class="input-group">
+            <input type="text" class="form-control input-lg"><span class="input-group-addon btn btn-primary">搜索</span>
+        </div>
+        <h4 style="text-align: center">共为你找到相关结果为{{.Hits}}个。显示从{{.Start}}起共{{len .Items}}个</h4>
+    </div>
+
+    <div id="customers" class="table-responsive-vertical shadow-z-1">
+        <table id="table" class="table table-striped table-hover table-mc-indigo">
+            <thead>
+            <tr>
+                <th>昵称</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>身高</th>
+                <th>体重</th>
+                <th>收入</th>
+                <th>学历</th>
+                <th>职位</th>
+                <th>所在地</th>
+                <th>星座</th>
+                <th>购房情况</th>
+                <th>购车情况</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{range .Items}}
+            <tr>
+                <td><a href="{{.Url}}" target="_blank">{{.Payload.Name}}</a></td>
+            {{with .Payload}}
+                <td>{{.Gender}}</td>
+                <td>{{.Age}}</td>
+                <td>{{.Height}}</td>
+                <td>{{.Weight}}</td>
+                <td>{{.Income}}</td>
+                <td>{{.Education}}</td>
+                <td>{{.Occupation}}</td>
+                <td>{{.Hukou}}</td>
+                <td>{{.Xingzuo}}</td>
+                <td>{{.House}}</td>
+                <td>{{.Car}}</td>
+            {{end}}
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="12">没有找到相关用户</td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
