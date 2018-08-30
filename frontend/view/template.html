@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:javascript="http://www.w3.org/1999/xhtml">
 <head>
     <title>Love Search</title>
     <meta charset="utf-8">
@@ -9,6 +9,7 @@
           id="bootstrap-css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="./js/page.js"></script>
 </head>
 <body>
 
@@ -69,10 +70,13 @@
             </tbody>
         </table>
         <div align="middle">
-        {{if ge .PrevFrom 0}}
-            <a href="search?q={{.Query}}&from={{.PrevFrom}}">上一页</a>
+        {{if gt .CurrentPage 1}}
+            <a href="#" onclick="prevPage('{{.Query}}', '{{.CurrentPage}}')">上一页</a>
         {{end}}
-            <a href="search?q={{.Query}}&from={{.NextFrom}}">下一页</a>
+        {{if lt .CurrentPage .TotalPage}}
+            <a href="#" onclick="nextPage('{{.Query}}', '{{.CurrentPage}}')">下一页</a>
+        {{end}}
+            <span>共{{.TotalPage}}页,当前第{{.CurrentPage}}页</span>
         </div>
     </div>
 </div>
