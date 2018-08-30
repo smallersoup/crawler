@@ -2,11 +2,11 @@ package controller
 
 import (
 	"crawler/frontend/view"
-	"gopkg.in/olivere/elastic.v5"
+	"github.com/olivere/elastic"
 	"net/http"
 	"strings"
 	"strconv"
-		"gopkg.in/olivere/elastic.v5/config"
+	"github.com/olivere/elastic/config"
 	"crawler/frontend/model"
 	"context"
 	"reflect"
@@ -25,15 +25,15 @@ func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 	q := strings.TrimSpace(req.FormValue("q"))
 
-	from, err := strconv.Atoi(req.FormValue("from"))
+	currentPage, err := strconv.Atoi(req.FormValue("current"))
 
 	if err != nil {
-		from = 0
+		currentPage = 1
 	}
 
 	//fmt.Fprintf(w, "q=%s, from=%d\n", q, from)
 
-	page, err := h.getSearchResult(q, from)
+	page, err := h.getSearchResult(q, currentPage)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -46,13 +46,15 @@ func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 }
 
-func (h SearchResultHandler) getSearchResult (q string, from int) (model.SearchResult, error) {
+func (h SearchResultHandler) getSearchResult(q string, currentPage int) (model.SearchResult, error) {
 
 	var result model.SearchResult
 	result.Query = q
 
 	//然后重写查询条件
 	q = rewriteQueryString(q)
+
+	from := currentPage * 10
 
 	log.Printf("query string q=%s\n", q)
 	resp, err := h.client.Search("dating_profile").Query(elastic.NewQueryStringQuery(q)).
@@ -65,8 +67,17 @@ func (h SearchResultHandler) getSearchResult (q string, from int) (model.SearchR
 	result.Hits = resp.TotalHits()
 	result.Start = from
 	result.Items = resp.Each(reflect.TypeOf(engine.Item{}))
-	result.PrevFrom = result.Start - len(result.Items)
-	result.NextFrom = result.Start + len(result.Items)
+	//result.PrevFrom = result.Start - len(result.Items)
+	//result.NextFrom = result.Start + len(result.Items)
+	result.CurrentPage = currentPage
+
+	if result.Hits % 10 > 0 {
+		result.TotalPage = result.Hits / 10 + 1
+	} else {
+		result.TotalPage = result.Hits / 10
+	}
+
+	log.Printf("共%d页;当前%d页\n", result.TotalPage, result.CurrentPage)
 
 	return result, nil
 }
@@ -79,7 +90,7 @@ func CreateSearchResultHandler(templateName string) SearchResultHandler {
 	client, err := elastic.NewClientFromConfig(
 		&config.Config{
 			//URL:   "http://192.168.1.102:9200",
-			URL:   "http://192.168.1.101:9200",
+			URL:   "http://127.0.0.1:9200",
 			Sniff: &sniff,
 		})
 
@@ -88,7 +99,7 @@ func CreateSearchResultHandler(templateName string) SearchResultHandler {
 	}
 
 	return SearchResultHandler{
-		view: view.CreateSearchResultView(templateName),
+		view:   view.CreateSearchResultView(templateName),
 		client: client,
 	}
 }
