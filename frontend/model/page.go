@@ -6,6 +6,8 @@ type SearchResult struct {
 	Query string
 	PrevFrom int
 	NextFrom int
+	CurrentPage int
+	TotalPage int64
 	Items []interface{}
 	//Items []engine.Item
 }
