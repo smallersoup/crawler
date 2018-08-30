@@ -60,7 +60,7 @@ func determineEncoding(r *bufio.Reader) encoding.Encoding {
 
 	//如果解析编码类型时遇到错误,返回UTF-8
 	if err != nil {
-		log.Printf("determineEncoding error is %v", err)
+		//log.Printf("determineEncoding error is %v", err)
 		return unicode.UTF8
 	}
 

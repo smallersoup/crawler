@@ -1,9 +1,11 @@
 package model
 
-import "learngo/crawler/engine"
-
 type SearchResult struct {
-	Hits int
+	Hits int64
 	Start int
-	Items []engine.Item
+	Query string
+	PrevFrom int
+	NextFrom int
+	Items []interface{}
+	//Items []engine.Item
 }

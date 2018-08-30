@@ -1,17 +1,17 @@
 package engine
 
-import (
-	"log"
-)
+var visitedUrls = make(map[string]bool)
 
 type ConcurrentEngine struct {
 	Scheduler  Scheduler
 	WokerCount int
+	ItemChan   chan Item
 }
 
 type Scheduler interface {
 	ReadyNotifier
 	Submit(Request)
+
 	WorkerChan() chan Request
 	Run()
 }
@@ -38,24 +38,44 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 
 	//任务分发给Worker
 	for _, r := range seeds {
+
+		if isDuplicate(r.Url) {
+			continue
+		}
+
 		e.Scheduler.Submit(r)
 	}
 
-	count := 0
 	for {
 		//打印out的items
 		result := <-out
 		for _, item := range result.Items {
-			log.Printf("Get Count:%d; Items: %v\n", count, item)
-			count++
+			go func() { e.ItemChan <- item }()
 		}
 
 		//将out里的Request送给Scheduler
 		for _, r := range result.Requests {
+
+			if isDuplicate(r.Url) {
+				continue
+			}
+
 			e.Scheduler.Submit(r)
 		}
-
 	}
+}
+
+func isDuplicate(url string) bool {
+
+	//if url exist in map, return true
+	if visitedUrls[url] {
+		return true
+	}
+
+	//else not exist, set true, return false
+	visitedUrls[url] = true
+
+	return false
 }
 
 //workerConut goroutine to exec worker for Loop
@@ -91,7 +111,6 @@ func createWorker(in chan Request, out chan ParserResult, ready ReadyNotifier) {
 			if err != nil {
 				continue
 			}
-
 			//将parserResult送出
 			out <- parserResult
 		}

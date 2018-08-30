@@ -1,12 +1,12 @@
-package frontend
+package view
 
 import (
 	"testing"
 	"html/template"
-	"learngo/crawler/model"
-	common "learngo/crawler/frontend/model"
+	"crawler/model"
+	common "crawler/frontend/model"
 	"os"
-	"learngo/crawler/engine"
+	"crawler/engine"
 )
 
 func TestTemplate(t *testing.T) {
@@ -44,7 +44,7 @@ func TestTemplate2(t *testing.T) {
 			House:      "已购房",
 			Car:        "已购车",
 			Hukou:      "上海徐汇区",
-			Xingzuo:    "水瓶座",
+			Xinzuo:    "水瓶座",
 		},
 	}
 
@@ -56,6 +56,46 @@ func TestTemplate2(t *testing.T) {
 	file, _ := os.Create("template_test.html")
 
 	if err := template.Execute(file, page); err != nil {
+		panic(err)
+	}
+}
+
+
+func TestSearchResultView(t *testing.T) {
+
+	s := CreateSearchResultView("template.html")
+
+	page := common.SearchResult{}
+
+	page.Hits = 123
+	page.Start = 0
+	item := engine.Item {
+		Url:  "http://album.zhenai.com/u/107194488",
+		Type: "zhenai",
+		Id:   "107194488",
+		Payload: model.Profile{
+			Name:       "霓裳",
+			Age:        28,
+			Height:     157,
+			Marriage:   "未婚",
+			Income:     "5001-8000元",
+			Education:  "中专",
+			Occupation: "程序媛",
+			Gender:     "女",
+			House:      "已购房",
+			Car:        "已购车",
+			Hukou:      "上海徐汇区",
+			Xinzuo:    "水瓶座",
+		},
+	}
+
+	for i := 0; i < 10; i++ {
+		page.Items = append(page.Items, item)
+	}
+
+	file, _ := os.Create("template_test.html")
+
+	if err := s.Render(file, page); err != nil {
 		panic(err)
 	}
 }
