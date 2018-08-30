@@ -1,5 +1,10 @@
 # crawler
 IDEA go插件下载地址
+
+golang 模板(template)的常用基本语法
+https://studygolang.com/articles/8023
+
+
 https://plugins.jetbrains.com/plugin/9568-go
 
  findstr /S /I /MM "sourceIp" /*.java
