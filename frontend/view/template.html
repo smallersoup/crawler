@@ -71,10 +71,10 @@
         </table>
         <div align="middle">
         {{if gt .CurrentPage 1}}
-            <a href="#" onclick="prevPage('{{.Query}}', '{{.CurrentPage}}')">上一页</a>
+            <a href="search?q={{.Query}}&current={{Sub .CurrentPage 1}}">上一页</a>
         {{end}}
         {{if lt .CurrentPage .TotalPage}}
-            <a href="#" onclick="nextPage('{{.Query}}', '{{.CurrentPage}}')">下一页</a>
+            <a href="search?q={{.Query}}&current={{Add .CurrentPage 1}}">下一页</a>
         {{end}}
             <span>共{{.TotalPage}}页,当前第{{.CurrentPage}}页</span>
         </div>
