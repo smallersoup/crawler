@@ -1,21 +1,5 @@
 # crawler
-IDEA go插件下载地址
 
-golang 模板(template)的常用基本语法
-https://studygolang.com/articles/8023
-
-Golang模板函数使用范例
-https://blog.csdn.net/wj199395/article/details/75040723
-
-Go模板入门 | Hugo 21
-http://www.g-var.com/posts/translation/hugo/hugo-21-go-template-primer/
-
-
-error: template: “…” is an incomplete or empty template
-https://stackoverflow.com/questions/49043292/error-template-is-an-incomplete-or-empty-template
-
-
-https://plugins.jetbrains.com/plugin/9568-go
 
  findstr /S /I /MM "sourceIp" /*.java
 
