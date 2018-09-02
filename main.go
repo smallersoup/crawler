@@ -9,6 +9,7 @@ import (
 	"os"
 	"fmt"
 	"log"
+	"crawler/crawler_distributed/config"
 )
 
 func init() {
@@ -22,7 +23,7 @@ func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile) //设置答应日志每一行前的标志信息，这里设置了日期，打印时间，当前go文件的文件名
 
 	//write log
-	log.Printf("test out:%v \n", "test log") //向日志文件打印日志，可以看到在你设置的输出文件中有输出内容了
+	log.Printf("---------------Start Crawler----------------") //向日志文件打印日志，可以看到在你设置的输出文件中有输出内容了
 }
 
 func main() {
@@ -43,6 +44,7 @@ func main() {
 		//Scheduler:  &scheduler.SimpleScheduler{},
 		WokerCount: 100,
 		ItemChan:   itemChan,
+		RequestProcessor: engine.Worker,
 	}
 
 	/*	e.Run(
@@ -54,7 +56,6 @@ func main() {
 	e.Run(
 		engine.Request{
 			Url:        "http://www.zhenai.com/zhenghun",
-			ParserFunc: parser.ParseCityList,
+			Parser: engine.NewFuncParser(parser.ParseCityList, config.ParseCityList),
 		})
-
 }

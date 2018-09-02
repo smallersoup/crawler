@@ -20,7 +20,7 @@ func (simpleEngine *SimpleEngine) Run(seeds ...Request) {
 		requestsQueue = requestsQueue[1:]
 
 		//解析爬取到的结果
-		result, err := worker(r)
+		result, err := Worker(r)
 
 		if err != nil {
 			continue

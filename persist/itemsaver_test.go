@@ -13,9 +13,9 @@ import (
 func TestSave(t *testing.T) {
 
 	expectedItem := engine.Item{
-		Id: "108666172",
+		Id: "108906739",
 		Type: "zhenai",
-		Url: "http://album.zhenai.com/u/108666172",
+		Url: "http://album.zhenai.com/u/108906739",
 		Payload: model.Profile{
 			Age:        34,
 			Height:     162,
@@ -37,11 +37,16 @@ func TestSave(t *testing.T) {
 	//TODO: Try to startup elastic search here using docker go client
 	client, err := elastic.NewClientFromConfig(
 		&config.Config{
-			URL:   "http://192.168.1.102:9200",
+			URL:   "http://192.168.1.101:9200",
 			Sniff: &sniff,
 		})
 	const index = "dating_test"
-	id, err := save(client, index, expectedItem)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	id, err := Save(client, index, expectedItem)
 
 	if err != nil {
 		panic(err)
@@ -50,7 +55,7 @@ func TestSave(t *testing.T) {
 	t.Logf("Id:%s\n", id)
 
 	itemService := client.Get().
-		Index("dating_profile").
+		Index(index).
 		Type(expectedItem.Type).
 		Id(expectedItem.Id)
 

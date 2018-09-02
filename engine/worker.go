@@ -5,7 +5,7 @@ import (
 	"crawler/fetcher"
 )
 
-func worker(r Request) (ParserResult, error) {
+func Worker(r Request) (ParserResult, error) {
 
 	//log.Printf("fetching url:%s\n", r.Url)
 	//爬取数据
@@ -18,5 +18,5 @@ func worker(r Request) (ParserResult, error) {
 	}
 
 	//解析爬取到的结果
-	return r.ParserFunc(body, r.Url), nil
+	return r.Parser.Parser(body, r.Url), nil
 }

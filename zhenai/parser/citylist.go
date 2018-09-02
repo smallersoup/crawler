@@ -3,6 +3,7 @@ package parser
 import (
 	"crawler/engine"
 	"regexp"
+	"crawler/crawler_distributed/config"
 )
 
 var	cityListReg = regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`)
@@ -28,7 +29,7 @@ func ParseCityList(contents []byte, _ string) engine.ParserResult {
 			engine.Request{
 				Url: string(m[1]),
 				//这个parser是对城市下面的用户的parse
-				ParserFunc: ParseCity,
+				Parser: engine.NewFuncParser(ParseCity, config.ParseCity),
 			})
 		//limit--
 		//if limit == 0 {

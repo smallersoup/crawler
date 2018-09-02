@@ -10,14 +10,22 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
+//Qps
+var rateLimit = time.Tick(time.Second / 20)
 /**
 爬取网络资源函数
 */
 func Fetch(url string) ([]byte, error) {
 
+	<- rateLimit
+
 	client := &http.Client{}
+
+	log.Printf("Fetching url %s", url)
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatalln("NewRequest is err ", err)

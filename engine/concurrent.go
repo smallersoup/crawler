@@ -6,7 +6,10 @@ type ConcurrentEngine struct {
 	Scheduler  Scheduler
 	WokerCount int
 	ItemChan   chan Item
+	RequestProcessor Processor
 }
+
+type Processor func(Request) (ParserResult, error)
 
 type Scheduler interface {
 	ReadyNotifier
@@ -33,7 +36,8 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	//创建Worker
 	for i := 0; i < e.WokerCount; i++ {
 		//createWorker(in, out)
-		createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
+		//e.createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
+		e.createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
 	}
 
 	//任务分发给Worker
@@ -98,14 +102,16 @@ func isDuplicate(url string) bool {
 }*/
 
 //workerConut goroutine to exec worker for Loop
-func createWorker(in chan Request, out chan ParserResult, ready ReadyNotifier) {
+func (e *ConcurrentEngine) createWorker(in chan Request, out chan ParserResult, ready ReadyNotifier) {
 	go func() {
 		for {
 			ready.WorkReady(in)
 			// 这里会卡住,直到QueuedScheduler.Run()里第三个case被执行,即把requestQ[0]放进workerQ[0]
 			// 后每个这里定义的in(chan of Request)就有值不阻塞了
 			request := <-in
-			parserResult, err := worker(request)
+			//parserResult, err := Worker(request)
+			//Call WorkerRpc worker
+			parserResult, err := e.RequestProcessor(request)
 
 			//发生了错误继续下一个
 			if err != nil {

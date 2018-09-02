@@ -13,8 +13,7 @@ import (
 	"log"
 	"gopkg.in/olivere/elastic.v5"
 	"gopkg.in/olivere/elastic.v5/config"
-	"fmt"
-)
+	)
 
 const size = 10
 const es_max_result_window = 10000
@@ -63,9 +62,9 @@ func (h SearchResultHandler) getSearchResult(q string, currentPage int) (model.S
 	//ElasticSearch默认max_result_window为10000,超出范围会报错,也可以通过以下curl修改window大小,但是会增加内存和cpu开销,项目中需要权衡
 	// curl -XPUT http://127.0.0.1:9200/dating_profile/_settings -d '{ "index" : { "max_result_window" : 100000000}}'
 	//这里简单做校验
-	if from + size > es_max_result_window {
+	/*if from + size > es_max_result_window {
 		return result, fmt.Errorf("ElasticSearch setting required:Result window is too large, from + size must be less than or equal to: [10000], but %d\n", from + size)
-	}
+	}*/
 
 	log.Printf("query string q=%s, from=%d\n", q, from)
 	resp, err := h.client.Search("dating_profile").Query(elastic.NewQueryStringQuery(q)).

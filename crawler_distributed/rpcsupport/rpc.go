@@ -4,19 +4,20 @@ import (
 	"net/rpc"
 	"net"
 	"net/rpc/jsonrpc"
-	"fmt"
-	"log"
+		"log"
 )
 
 func ServeRpc(host string, service interface{}) error {
 
 	rpc.Register(service)
 
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", host))
+	listener, err := net.Listen("tcp", host)
 
 	if err != nil {
 		return err
 	}
+
+	log.Printf("Listening on %s", host)
 
 	for {
 		conn, err := listener.Accept()
@@ -32,7 +33,7 @@ func ServeRpc(host string, service interface{}) error {
 
 func NewClient(host string) (*rpc.Client, error) {
 
-	conn, err := net.Dial("tcp", fmt.Sprintf(":%s", host))
+	conn, err := net.Dial("tcp", host)
 
 	if err != nil {
 		return nil, err
