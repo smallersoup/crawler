@@ -50,6 +50,7 @@ err := zipFile(config.LogFile, backfile)
 		return
 	} else {
 		os.Remove(config.LogFile)
+		sasa
 	}
 
 	al.createFile()
