@@ -16,7 +16,7 @@ func startCheckDeleteLogTimer(file string) {
 
 	//count down timer
 	t := time.NewTimer(du)
-
+	wwwe
 	isFirst := make(chan bool, 1)
 	select {
 	case isFirstTime := <-t.C:
