@@ -7,6 +7,7 @@ https://plugins.jetbrains.com/plugin/9568-go
 ```go
 
 func startCheckDeleteLogTimer(file string) {
+s
 
 	//get now time
 	now := time.Now()
