@@ -7,7 +7,7 @@ https://plugins.jetbrains.com/plugin/9568-go
 ```go
 
 func startCheckDeleteLogTimer(file string) {
-
+vava
 	//get now time
 	now := time.Now()
 
@@ -16,7 +16,7 @@ func startCheckDeleteLogTimer(file string) {
 
 	//count down timer
 	t := time.NewTimer(du)
-
+	wwwe
 	isFirst := make(chan bool, 1)
 	select {
 	case isFirstTime := <-t.C:
