@@ -7,7 +7,6 @@ https://plugins.jetbrains.com/plugin/9568-go
 ```go
 
 func startCheckDeleteLogTimer(file string) {
-s
 
 	//get now time
 	now := time.Now()
@@ -50,7 +49,6 @@ err := zipFile(config.LogFile, backfile)
 		return
 	} else {
 		os.Remove(config.LogFile)
-		sasa
 	}
 
 	al.createFile()
